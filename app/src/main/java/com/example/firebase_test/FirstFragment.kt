@@ -1,5 +1,6 @@
 package com.example.firebase_test
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,7 +38,8 @@ class FirstFragment : Fragment() {
         }
 
         binding.btlogin.setOnClickListener {
-
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
