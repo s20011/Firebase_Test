@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import com.example.firebase_test.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
             .build()
         googleSingInClient = GoogleSignIn.getClient(this, gso)
 
-        //Firebaase Authの初期化
+        //Firebase Authの初期化
         auth = Firebase.auth
 
         binding.loginbutton.setOnClickListener {
@@ -62,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //GoogleSignInApi.getSignInintent()からIntentを起動して返された結果
+        //GoogleSignInApi.getSingInIntent()からIntentを起動して返された結果
         if(requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try{
@@ -128,7 +127,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         val profileUpdates = userProfileChangeRequest {
-            displayName = name ?: "======="
+            displayName = when(name) {
+                "" -> "====="
+                else -> name
+            }
+
         }
 
         user.updateProfile(profileUpdates).addOnCompleteListener { task ->
@@ -138,6 +141,7 @@ class LoginActivity : AppCompatActivity() {
                     "名前を変更しました",
                     Toast.LENGTH_LONG
                 ).show()
+                Log.d(TAG, "--->" + binding.usernametx.text.toString())
                 Log.d(TAG, "User profile updated")
             }
         }
