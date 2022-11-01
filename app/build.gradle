@@ -38,6 +38,7 @@ android {
     }
 }
 
+//https://developers.google.com/identity/one-tap/android/get-saved-credentials?hl=ja
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'

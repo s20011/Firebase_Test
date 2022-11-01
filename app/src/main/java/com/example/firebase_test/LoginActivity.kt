@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import com.example.firebase_test.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -14,6 +15,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +39,15 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginbutton.setOnClickListener {
             signIn()
+        }
+
+        binding.btsignOut.setOnClickListener {
+            signOut()
+        }
+
+        binding.updatebt.setOnClickListener {
+            val name = binding.updateUsername.text.toString()
+            updateProfile(name)
         }
     }
 
@@ -88,17 +99,54 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
+
+    private fun signOut() {
+        Firebase.auth.signOut()
+        updateUI(auth.currentUser)
+    }
+
     private fun updateUI(user: FirebaseUser?){
-        binding.emailtext.text = if (user == null){
-            "NULL"
+        if (user == null){
+            binding.emailtext.text = "NULL"
+            binding.usernametx.text = "NULL"
         }else {
-            user?.email.toString()
+            binding.emailtext.text = user.email.toString()
+            binding.usernametx.text = user.displayName.toString()
+        }
+    }
+
+    //Userの名前変更
+    private fun updateProfile(name:String){
+        val user = Firebase.auth.currentUser
+        //ログインしていないときにボタンが押されたときの処理
+        if(user == null) {
+            Toast.makeText(this@LoginActivity,
+                MESSAGE_NOT_LOGIN,
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name ?: "======="
+        }
+
+        user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                binding.usernametx.text = user.displayName.toString()
+                Toast.makeText(this@LoginActivity,
+                    "名前を変更しました",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d(TAG, "User profile updated")
+            }
         }
     }
 
     companion object {
         private const val TAG = "GoogleActivity"
-        private const val RC_SIGN_IN = 9001
+        private const val MESSAGE_NOT_LOGIN = "ログインしてください"
+        private const val RC_SIGN_IN = 100
     }
 
 
