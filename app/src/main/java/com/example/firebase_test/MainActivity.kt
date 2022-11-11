@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        Dbreadwrite("s20041",
+        /*Dbreadwrite("s20041",
             "zayasuseiya",
-            "s20041@std.it-college.ac.jp")
+            "s20041@std.it-college.ac.jp")*/
     }
 
-    fun Dbreadwrite(userId: String, name: String, email: String){
+    /*fun Dbreadwrite(userId: String, name: String, email: String){
         val user = User(name, email)
 
         //データベースのインスタンス取得
@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() {
                 Log.w("MainActivity", "Failed to read value.", error.toException())
             }
         }*/
-
-
 
 
 
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    }
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

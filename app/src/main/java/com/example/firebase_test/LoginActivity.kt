@@ -26,6 +26,13 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.loginActivityToolbar)
+        supportActionBar?.let {
+            it.title = "Login"
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
+        }
+
         //Googleサインインを設定する
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -48,6 +55,11 @@ class LoginActivity : AppCompatActivity() {
             val name = binding.updateUsername.text.toString()
             updateProfile(name)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 
     override fun onStart() {
